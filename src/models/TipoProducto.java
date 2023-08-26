@@ -1,2 +1,5 @@
-package models;public enum TipoProducto {
+package models;
+
+public enum TipoProducto {
+    BEBIDA,ENVASADO,LIMPIEZA
 }

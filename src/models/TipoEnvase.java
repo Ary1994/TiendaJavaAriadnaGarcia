@@ -1,2 +1,5 @@
-package models;public enum TipoEnvase {
+package models;
+
+public enum TipoEnvase {
+    PLASTICO,VIDRIO,LATA
 }

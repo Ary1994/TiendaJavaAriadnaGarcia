@@ -16,7 +16,9 @@ public class Envasado extends Producto implements Comestible , Descuento {
         this.importado = importado;
         identificador="AB"+getId();
         if(importado){
-            aplicarImpuesto();
+
+            aplicarImpuesto(descripcion);
+
         }
     }
     //SETTERS
@@ -25,7 +27,7 @@ public class Envasado extends Producto implements Comestible , Descuento {
     }
     public void setImportado(boolean importado) {
         this.importado = importado;
-        if(importado)aplicarImpuesto();
+        if(importado)aplicarImpuesto(descripcion);
 
     }
 
@@ -69,9 +71,10 @@ public class Envasado extends Producto implements Comestible , Descuento {
 
     @Override
     public double obtenerPrecioConDescuento(String ident) {
-        double aux=(getPrecio()*(1-getPorcentajeDescuento()));
+        double aux=getPrecio()-(getPrecio()*getPorcentajeDescuento()/100);
         if(aux<getCosto()){
-            System.out.println("El descuento registrado para el producto"+ident+"no pudo ser aplicado");
+            System.out.println("El descuento registrado para el producto "+ident+" no pudo ser aplicado");
+            setPorcentajeDescuento(0);
             return getPrecio();
 
         }else return aux;
@@ -84,9 +87,9 @@ public class Envasado extends Producto implements Comestible , Descuento {
     }
 
     //PROPIAS
-    private void aplicarImpuesto(){
+    private void aplicarImpuesto(String des){
         double impuesto=this.precio*0.10;
         this.precio+=impuesto;
-        System.out.println("Se le aplico un impuesto por ser un producto importado");
+        System.out.println("Se le aplico a "+des+" un impuesto por ser un producto importado");
     }
 }

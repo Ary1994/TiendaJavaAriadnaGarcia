@@ -1,6 +1,6 @@
 package service;
 import models.*;
-
+import java.util.stream.*;
 import java.util.*;
 public class Tienda {
      String nombre;
@@ -27,6 +27,10 @@ public class Tienda {
     }
     public double getSaldoCaja() {
         return saldoCaja;
+    }
+
+    public int getStock() {
+        return stock;
     }
 
     //SETTERS
@@ -74,6 +78,7 @@ public class Tienda {
                stockLimpieza.put(env.getIdentificador(),(Limpieza) env);
 
           }
+
           stock+= env.getCantidad();
      }
     //PROPIAS PARA LA FUNCION VENTA
@@ -228,5 +233,82 @@ public class Tienda {
         for(Limpieza value:stockLimpieza.values()){
             mostrarProducto(value);
         }
+    }
+
+    //REQUERIMIENTOS ADICIONALES 1
+    public void obtenerComestiblesConMenorDescuento(double porce){
+        List<Producto> productos=productosNoImportados();
+        productos.stream()
+                .filter(producto-> producto.getPorcentajeDescuento()<= porce)
+                .sorted(Comparator.comparingDouble(Producto::getPrecio))
+                .forEach(producto -> System.out.print(producto.getDescripcion().toUpperCase()+" "+producto.getPrecio()+(",")));
+    }
+    public List<Producto> productosNoImportados(){
+        List<Bebida>aux=bebidasNoimportadas();
+        List<Envasado>aux2=envasadosNoimportados();
+
+        List<Producto> productos =aux.stream()
+                .map(bebida -> (Producto) bebida)
+                .collect(Collectors.toList());
+        List<Producto> productos2 =aux2.stream()
+                .map(bebida -> (Producto) bebida)
+                .collect(Collectors.toList());
+        productos.addAll(productos2);
+        return productos;
+
+
+    }
+    public List<Bebida> bebidasNoimportadas(){
+        List<Bebida> bebidas =new ArrayList<>(stockBebidas.values());
+
+        List<Bebida>bebidasImpotadas=bebidas.stream().filter(bebida ->!bebida.isImportado()).collect(Collectors.toList());;
+
+        return bebidasImpotadas;
+
+    }
+    public List<Envasado> envasadosNoimportados(){
+        List<Envasado> envasados=new ArrayList<>(stockEnvasado.values());
+
+        List<Envasado>bebidasImpotadas=envasados.stream().filter(envasado ->!envasado.isImportado()).collect(Collectors.toList());;
+
+        return bebidasImpotadas;
+    }
+    //REQUERIMIENTOS ADICIONALES 2
+
+    public void listarProductosConUtilidadesInferiores(double porc){
+        List<Producto> productos=listaProducto();
+        productos.stream()
+                .filter(producto -> producto.porcentajeGanancias()<porc)
+                .forEach(producto -> System.out.println(producto.getIdentificador()+" "+producto.getDescripcion()+" "+producto.getCantidad()));
+    }
+    public List<Producto>listaProducto(){
+        List<Bebida>aux=listaBebidas();
+        List<Envasado>aux2=listaEnvasado();
+        List<Limpieza>aux3=listaLimpieza();
+
+        List<Producto> productos =aux.stream()
+                .map(bebida -> (Producto) bebida)
+                .collect(Collectors.toList());
+        List<Producto> productos2 =aux2.stream()
+                .map(bebida -> (Producto) bebida)
+                .collect(Collectors.toList());
+        List<Producto> productos3 =aux3.stream()
+                .map(bebida -> (Producto) bebida)
+                .collect(Collectors.toList());
+        productos.addAll(productos2);
+        productos.addAll(productos3);
+        return productos;
+    }
+    public List<Limpieza> listaLimpieza(){
+        List<Limpieza> listaLimpieza=new ArrayList<>(stockLimpieza.values());
+        return listaLimpieza;
+    }
+    public List<Envasado> listaEnvasado(){
+        List<Envasado> listaEnvasados=new ArrayList<>(stockEnvasado.values());
+        return listaEnvasados;
+    }
+    public List<Bebida> listaBebidas(){
+        List<Bebida> listaBebidas =new ArrayList<>(stockBebidas.values());
+        return listaBebidas;
     }
 }

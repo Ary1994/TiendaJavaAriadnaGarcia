@@ -4,7 +4,7 @@ public class Limpieza extends Producto implements Descuento {
     TipoAplicacion tipoAplicacion;
     double porcentajeDescuento;
 
-    public Limpieza(String descripcion, int cantidad, double precio, double costo, boolean disponible, TipoAplicacion tipoAplicacion) {
+    public Limpieza(String descripcion, int cantidad, double precio, double costo, TipoAplicacion tipoAplicacion) {
         super(descripcion, cantidad, precio, costo);
         tipoProducto=TipoProducto.LIMPIEZA;
         this.tipoAplicacion=tipoAplicacion;
@@ -22,6 +22,7 @@ public class Limpieza extends Producto implements Descuento {
     @Override
     public void setPorcentajeDescuento(double porcentaje) {
         if(porcentaje>25){
+            porcentajeDescuento=25;
         }else {
             this.porcentajeDescuento=porcentaje;
         }
@@ -34,9 +35,10 @@ public class Limpieza extends Producto implements Descuento {
 
     @Override
     public double obtenerPrecioConDescuento(String ident) {
-        double aux=(getPrecio()*(1-getPorcentajeDescuento()));
+        double aux=getPrecio()-(getPrecio()*getPorcentajeDescuento()/100);
         if(aux<getCosto()){
-            System.out.println("El descuento registrado para el producto"+ident+"no pudo ser aplicado");
+            System.out.println("El descuento registrado para el producto "+ident+" no pudo ser aplicado");
+            setPorcentajeDescuento(0);
             return getPrecio();
 
         }else return aux;
@@ -56,4 +58,6 @@ public class Limpieza extends Producto implements Descuento {
 
 
     }
+
+
 }

@@ -12,7 +12,7 @@ public class Producto {
     boolean disponible=true;
     TipoProducto tipoProducto;
 
-    double porcentajeDescuento;
+    double porcentajeDescuento=0;
     //CONTRUCTORES
     public Producto() {
 
@@ -29,6 +29,11 @@ public class Producto {
     }
 
     //GETTERS
+
+    public double getPorcentajeDescuento() {
+        return porcentajeDescuento;
+    }
+
     public String getIdentificador() {
         return identificador;
     }
@@ -81,6 +86,7 @@ public class Producto {
 
 
     //FUNCIONES PROPIAS
+
     private static void incrementarContador() {
         contador++;
     }
